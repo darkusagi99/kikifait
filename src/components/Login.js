@@ -6,7 +6,7 @@ import '../App.css';
 const Login = () => {
   return (
     <div className="text-center">
-      <button className="button" onClick={() => {
+      <button className="btn btn-default btn-lg active" onClick={() => {
 			  signInWithPopup(auth, provider).then((result) => {
 				// The signed-in user info.
 				var user = result.user;
