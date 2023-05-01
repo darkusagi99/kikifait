@@ -16,22 +16,37 @@ class NewContest extends React.Component {
 		// Binding method
 		this.onEntrantRangeChange = this.onEntrantRangeChange.bind(this);
 		this.onDrawRangeChange = this.onDrawRangeChange.bind(this);
+		this.onSubmit = this.onSubmit.bind(this);
 	}
 	
+	/** Form submission management */
+	onSubmit(e) {
+		// Prevent default submission
+        e.preventDefault();
+		
+		// Create new entry inside Realtime database
+		
+	}
+	
+	/** Manage range change - Entrant range */
 	onEntrantRangeChange(e) {
 		console.log("OnRangeChange");
        this.setState({entrantRangeValue : e.target.value});
 	}
 	
+	
+	/** Manage range change - Draw range */
 	onDrawRangeChange(e) {
 		console.log("OnRangeChange");
        this.setState({drawRangeValue : e.target.value});
 	}
 	
+	
+	/** Component display */
 	render(){
 		return (
 			<div> { /* Form DIV */ }
-				<form>
+				<form onSubmit={this.onSubmit}>
 					<div className="px-5 d-flex flex-column justify-content-center gap-3">
 						<div className="form-group">
 							<label htmlFor="newTitle">Titre du kikifait</label>
