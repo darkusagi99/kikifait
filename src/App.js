@@ -45,7 +45,7 @@ function App() {
 
 	return (
 		<div className="app">
-		  <Login />
+		{user ? <Home user={user} /> : <Login />}
 		</div>
 	);
 }
