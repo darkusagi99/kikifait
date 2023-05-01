@@ -1,7 +1,7 @@
 import React, { Component, useEffect } from 'react'
 import { auth, db } from '../services/firebase';
 import { ref, push, set, onValue, remove } from "firebase/database";
-
+import { Link } from 'react-router-dom';
 
 import '../App.css';
 
@@ -65,6 +65,7 @@ class ContestList extends React.Component {
 			<div className="px-5 d-flex flex-column justify-content-center gap-3 mt-5"> { /* List element DIV */ }
 			{
 				this.state.contestData.map(entry => (
+					<Link style={{ color: 'inherit', textDecoration: 'inherit'}} to={"/" + entry.key}>
 						<div className="card" key={entry.key}>
 							<div className="card-body">
 								<h5 className="card-title">{entry.label}</h5>
@@ -82,6 +83,7 @@ class ContestList extends React.Component {
 								</button>
 							</div>
 						</div>
+					</Link>
 					)
 				)
 			}
