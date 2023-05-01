@@ -1,14 +1,17 @@
 import React, { Component } from 'react'
-import { auth } from '../services/firebase';
+import { auth, db } from '../services/firebase';
+import { ref, push, set } from "firebase/database";
+
 
 import '../App.css';
 /** Component for NewContest - v9 version */
 class NewContest extends React.Component {
 	
-	constructor() {
+	constructor(props) {
 
-		super();
+		super(props);
 		this.state = {
+		  newContestLabel:"",
 		  entrantRangeValue: 5,
 		  drawRangeValue:1
 		};
@@ -16,6 +19,7 @@ class NewContest extends React.Component {
 		// Binding method
 		this.onEntrantRangeChange = this.onEntrantRangeChange.bind(this);
 		this.onDrawRangeChange = this.onDrawRangeChange.bind(this);
+		this.onLabelChange = this.onLabelChange.bind(this);
 		this.onSubmit = this.onSubmit.bind(this);
 	}
 	
@@ -25,19 +29,35 @@ class NewContest extends React.Component {
         e.preventDefault();
 		
 		// Create new entry inside Realtime database
+		const contestListRef = ref(db, 'contest');
+		const newContestRef = push(contestListRef);
+		set(newContestRef, {
+			label: this.state.newContestLabel,
+			entrant:this.state.entrantRangeValue,
+			drawRange:this.state.drawRangeValue,
+			status:"New",
+			creator:this.props.user.email,
+			contestorList:[],
+			drawList:[]
+		});
+
 		
+	}
+	
+	/** Manage label change */
+	onLabelChange(e) {
+		console.log("newContestLabel");
+       this.setState({newContestLabel : e.target.value});
 	}
 	
 	/** Manage range change - Entrant range */
 	onEntrantRangeChange(e) {
-		console.log("OnRangeChange");
        this.setState({entrantRangeValue : e.target.value});
 	}
 	
 	
 	/** Manage range change - Draw range */
 	onDrawRangeChange(e) {
-		console.log("OnRangeChange");
        this.setState({drawRangeValue : e.target.value});
 	}
 	
@@ -50,7 +70,7 @@ class NewContest extends React.Component {
 					<div className="px-5 d-flex flex-column justify-content-center gap-3">
 						<div className="form-group">
 							<label htmlFor="newTitle">Titre du kikifait</label>
-							<input type="text" className="form-control" id="newTitle" aria-describedby="NewTitle" placeholder="Entrer titre" />
+							<input type="text" className="form-control" id="newTitle" aria-describedby="NewTitle" placeholder="Entrer titre" value={this.state.newContestLabel} onChange={this.onLabelChange} />
 						</div>
 						<div className="form-group">
 							<label htmlFor="entrantRange">Nombre de participants</label>

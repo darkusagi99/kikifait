@@ -16,7 +16,7 @@ const Home = ({ user }) => {
 		<Logout user={user} />
 		
 		{ /* Form DIV */ }
-		<NewContest />
+		<NewContest user={user} />
 
 		<div> { /* List element DIV */ }
 		
