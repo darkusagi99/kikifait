@@ -1,9 +1,8 @@
 import { initializeApp } from 'firebase/app';
+import { getFirestore } from 'firebase/firestore';
 import { getAuth, GoogleAuthProvider } from 'firebase/auth';
-import { getDatabase } from "firebase/database";
 
-
-/** Declare and init firebase components - v9 version */
+/** Component for draw elements */
 const firebaseConfig = {
   apiKey: "AIzaSyC7I4Psy8yMXZpjEC8-e3Pa12kUQysuK5U",
   authDomain: "kikifait-377cf.firebaseapp.com",
@@ -17,7 +16,7 @@ const firebaseConfig = {
 // Initialize Firebase 
 const app = initializeApp(firebaseConfig);
 
-export const db = getDatabase(app);
+export const db = getFirestore(app);
 export const auth = getAuth();
 export const provider = new GoogleAuthProvider();
 provider.setCustomParameters({ prompt: 'select_account' });
