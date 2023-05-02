@@ -41,6 +41,11 @@ class NewContest extends React.Component {
 			drawList:[]
 		});
 
+		this.setState({
+			newContestLabel : "", 
+			entrantRangeValue : 5,
+			drawRangeValue : 1
+		});
 		
 	}
 	
