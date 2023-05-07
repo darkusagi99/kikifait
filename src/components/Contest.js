@@ -145,20 +145,24 @@ class Contest extends React.Component {
 									<h6 className="card-subtitle mb-2 text-muted">{entry.name}</h6>
 									<p className="card-text">Nombre de personnes à sélectionner : {entry.ready ? "Pret" : "Pas Pret"}</p>
 								</div>
-							<div className="card-footer">
-								<button type="button" className="btn btn-default btn-xs active" onClick={this.removeParticipation}>
-									Ne plus participer
-								</button>
 								{
-								entry.ready ? 
-								<button type="button" className="btn btn-default btn-xs active" onClick={this.removeReadyState}>
-									Annuler
-								</button> :
-								<button type="button" className="btn btn-default btn-xs active" onClick={this.addReadyState}>
-									Prêt
-								</button>
+									(entry.key == this.props.user.uid) ? 
+										<div className="card-footer">
+											<button type="button" className="btn btn-default btn-xs active" onClick={this.removeParticipation}>
+												Ne plus participer
+											</button>
+											{
+											entry.ready ? 
+											<button type="button" className="btn btn-default btn-xs active" onClick={this.removeReadyState}>
+												Annuler
+											</button> :
+											<button type="button" className="btn btn-default btn-xs active" onClick={this.addReadyState}>
+												Prêt
+											</button>
+											}
+										</div>
+									: <div />
 								}
-							</div>
 						</div>
 							
 						)
