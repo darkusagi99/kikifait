@@ -36,3 +36,26 @@
     transform: rotate(360deg);
   }
 }
+
+
+.blink{
+	-webkit-animation-name: blinker;
+	-webkit-animation-duration: 2s;
+	-webkit-animation-iteration-count:infinite;
+	-webkit-animation-timing-function:ease-in-out;
+	-webkit-animation-direction: alternate;
+}
+
+.backgd{
+	background-color: lime;
+}
+
+
+.disabledBg{
+	background-color: lightsteelblue;
+}
+
+
+.inactiveBg{
+	background-color: white;
+}
