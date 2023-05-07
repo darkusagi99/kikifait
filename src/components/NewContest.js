@@ -82,7 +82,7 @@ class NewContest extends React.Component {
 					<div className="px-5 d-flex flex-column justify-content-center gap-3">
 						<div className="form-group">
 							<label htmlFor="newTitle">Titre du kikifait</label>
-							<input type="text" className="form-control" id="newTitle" aria-describedby="NewTitle" placeholder="Entrer titre" value={this.state.newContestLabel} onChange={this.onLabelChange} />
+							<input type="text" className="form-control" id="newTitle" aria-describedby="NewTitle" placeholder="Entrer titre" value={this.state.newContestLabel} onChange={this.onLabelChange} pattern="\w+" required />
 						</div>
 						<div className="form-group">
 							<label htmlFor="entrantRange">Nombre de participants</label>
