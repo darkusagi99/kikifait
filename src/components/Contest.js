@@ -41,30 +41,30 @@ class Contest extends React.Component {
     componentDidMount() {
 		
         let { id } = this.props.params;
-		console.log('Creation ID -- : ', id);
 		
 		const contestRef = ref(db, 'contest/' + this.state.id);
 		onValue(contestRef, (snapshot) => {
-			var contestorListTmp = [];
-			let { contestorList } = snapshot.val();
-			
-			// Liste des participants non-vide
-			if (!!contestorList) {
+			if (snapshot.val()) {
+				var contestorListTmp = [];
+				let { contestorList } = snapshot.val();
 				
-				// Boucle sur les clés et remise en forme de l'objet
-				Object.keys(contestorList).forEach((contestorKey) => {
-				
-					var tmpEntry = contestorList[contestorKey];
-					tmpEntry.key = contestorKey;
+				// Liste des participants non-vide
+				if (!!contestorList) {
 					
-					contestorListTmp.push(tmpEntry);
-				});
+					// Boucle sur les clés et remise en forme de l'objet
+					Object.keys(contestorList).forEach((contestorKey) => {
+					
+						var tmpEntry = contestorList[contestorKey];
+						tmpEntry.key = contestorKey;
+						
+						contestorListTmp.push(tmpEntry);
+					});
+				}
+				this.setState({
+					contestData : snapshot.val(),
+					contestorList : contestorListTmp
+					});
 			}
-			console.log(contestorListTmp);
-			this.setState({
-				contestData : snapshot.val(),
-				contestorList : contestorListTmp
-				});
 		});
 		
 		this.addParticipation();
@@ -97,11 +97,65 @@ class Contest extends React.Component {
 	
 	/** Add ready state */
 	addReadyState(){
+		
+		let nbeParticipants = this.state.contestorList.length;
+		console.log('Nbe participants : ' + nbeParticipants);
+		
+		let nbeReady = this.state.contestorList.filter(x => x.ready).length;
+		console.log('Nbe Ready : ' + nbeReady);
+		
+		// Update ready state
 		const contestorReadyRef = ref(db, 'contest/' + this.state.id + '/contestorList/' + this.state.user.uid + '/ready');
 		set(contestorReadyRef,
 			true
 		);	
+		
+		// Check if enough people and everybody ready
+		// If yes -> Tirage and status update
+		if (nbeParticipants > this.state.contestData.drawRange) {
+			
+			console.log('Tirage !!!!');
+			
+			let contestDataTmp = this.state.contestData;
+			contestDataTmp.active = false;
+			
+			
+			// Update draw state
+			const contestorRef = ref(db, 'contest/' + this.state.id + '/active');
+			set(contestorRef,
+				false
+			);	
+			
+			// Changer le statut de la demande
+			this.setState({
+				contestData : contestDataTmp
+			});
+			
+			let selectedList = [];
+			
+			// Choose people for the draw
+			for(let i = 0; i < this.state.contestData.drawRange; i++) {
+				
+				// Tirer les personnes sélectionnées
+				let selectedIdx = Math.floor(Math.random() * nbeParticipants);
+				
+				console.log('selectedIdx : ' + selectedIdx);
+				console.log('Choisi : ' + this.state.contestorList[selectedIdx].email);
+				
+				let selectedLabel = this.state.contestorList[selectedIdx].name + ' (' + this.state.contestorList[selectedIdx].email + ')';
+				selectedList.push(selectedLabel);
+			}
+			
+			// Update draw info
+			// Create new participation inside DB
+			const drawRef = ref(db, 'contest/' + this.state.id + '/drawList/');
+			set(drawRef, selectedList);
+			
+		}
+		
+		
 	}
+
 	
 	/** Remove ready state */
 	removeReadyState(){
@@ -126,6 +180,7 @@ class Contest extends React.Component {
 					<h6 className="mb-2 text-muted">{this.state.contestData.creator}</h6>
 					<h6 className="mb-2 text-muted">{this.state.contestData.status}</h6>
 					<h6 className="mb-2 text-muted">Nombre de personnes à sélectionner : {this.state.contestData.drawRange}</h6>
+					<h6 className="card-text">Liste des personnes choisies : {this.state.contestData.drawList}</h6>
 				</div>
 				
 				<Link style={{ color: 'inherit', textDecoration: 'inherit'}} to={"/"}>
@@ -146,7 +201,7 @@ class Contest extends React.Component {
 									<p className="card-text">Nombre de personnes à sélectionner : {entry.ready ? "Pret" : "Pas Pret"}</p>
 								</div>
 								{
-									(entry.key == this.props.user.uid) ? 
+									(entry.key == this.props.user.uid && this.state.contestData.active) ? 
 										<div className="card-footer">
 											<button type="button" className="btn btn-default btn-xs active" onClick={this.removeParticipation}>
 												Ne plus participer
