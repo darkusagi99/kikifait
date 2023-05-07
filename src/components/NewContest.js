@@ -28,24 +28,28 @@ class NewContest extends React.Component {
 		// Prevent default submission
         e.preventDefault();
 		
-		// Create new entry inside Realtime database
-		const contestListRef = ref(db, 'contest');
-		const newContestRef = push(contestListRef);
-		set(newContestRef, {
-			label: this.state.newContestLabel,
-			entrant:this.state.entrantRangeValue,
-			drawRange:this.state.drawRangeValue,
-			status:"New",
-			creator:this.props.user.email,
-			contestorList:[],
-			drawList:[]
-		});
+		// Check empty label
+		if (!!this.state.newContestLabel.trim()) {
+			// Create new entry inside Realtime database
+			const contestListRef = ref(db, 'contest');
+			const newContestRef = push(contestListRef);
+			set(newContestRef, {
+				label: this.state.newContestLabel,
+				entrant:this.state.entrantRangeValue,
+				drawRange:this.state.drawRangeValue,
+				status:"New",
+				creator:this.props.user.email,
+				contestorList:[],
+				drawList:[]
+			});
 
-		this.setState({
-			newContestLabel : "", 
-			entrantRangeValue : 5,
-			drawRangeValue : 1
-		});
+			this.setState({
+				newContestLabel : "", 
+				entrantRangeValue : 5,
+				drawRangeValue : 1
+			});
+		
+		}
 		
 	}
 	
@@ -71,6 +75,9 @@ class NewContest extends React.Component {
 	render(){
 		return (
 			<div> { /* Form DIV */ }
+				{/* Alert message */}
+			
+				{/* Input form */}
 				<form onSubmit={this.onSubmit}>
 					<div className="px-5 d-flex flex-column justify-content-center gap-3">
 						<div className="form-group">
