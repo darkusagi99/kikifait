@@ -12,12 +12,10 @@ class NewContest extends React.Component {
 		super(props);
 		this.state = {
 		  newContestLabel:"",
-		  entrantRangeValue: 5,
 		  drawRangeValue:1
 		};
 
 		// Binding method
-		this.onEntrantRangeChange = this.onEntrantRangeChange.bind(this);
 		this.onDrawRangeChange = this.onDrawRangeChange.bind(this);
 		this.onLabelChange = this.onLabelChange.bind(this);
 		this.onSubmit = this.onSubmit.bind(this);
@@ -35,9 +33,8 @@ class NewContest extends React.Component {
 			const newContestRef = push(contestListRef);
 			set(newContestRef, {
 				label: this.state.newContestLabel,
-				entrant:this.state.entrantRangeValue,
 				drawRange:this.state.drawRangeValue,
-				status:"New",
+				active:true,
 				creator:this.props.user.email,
 				contestorList:[],
 				drawList:[]
@@ -45,7 +42,6 @@ class NewContest extends React.Component {
 
 			this.setState({
 				newContestLabel : "", 
-				entrantRangeValue : 5,
 				drawRangeValue : 1
 			});
 		
@@ -55,13 +51,7 @@ class NewContest extends React.Component {
 	
 	/** Manage label change */
 	onLabelChange(e) {
-		console.log("newContestLabel");
        this.setState({newContestLabel : e.target.value});
-	}
-	
-	/** Manage range change - Entrant range */
-	onEntrantRangeChange(e) {
-       this.setState({entrantRangeValue : e.target.value});
 	}
 	
 	
@@ -82,13 +72,7 @@ class NewContest extends React.Component {
 					<div className="px-5 d-flex flex-column justify-content-center gap-3">
 						<div className="form-group">
 							<label htmlFor="newTitle">Titre du kikifait</label>
-							<input type="text" className="form-control" id="newTitle" aria-describedby="NewTitle" placeholder="Entrer titre" value={this.state.newContestLabel} onChange={this.onLabelChange} pattern="\w+" required />
-						</div>
-						<div className="form-group">
-							<label htmlFor="entrantRange">Nombre de participants</label>
-							
-							<input type="range" className="form-control form-range custom-range" id="entrantRange" min="2" max="15" value={this.state.entrantRangeValue} onChange={(e) => {this.onEntrantRangeChange(e)}} />
-							<input type="number" className="form-control" id="entrantInput" min="2" max="15" value={this.state.entrantRangeValue} onChange={(e) => {this.onEntrantRangeChange(e)}} />
+							<input type="text" className="form-control" id="newTitle" aria-describedby="NewTitle" placeholder="Entrer titre" value={this.state.newContestLabel} onChange={this.onLabelChange} required />
 						</div>
 						<div className="form-group">
 							<label htmlFor="entrantRange">Nombre de personnes à selectionner</label>

@@ -29,16 +29,9 @@ class ContestList extends React.Component {
 		const contestRef = ref(db, 'contest');
 		onValue(contestRef, (snapshot) => {
 			
-			
 			var tmpContestData = [];
 			
-			console.log('User data: ', snapshot.val());
-			
 			snapshot.forEach((contestEntry) => {
-				
-				console.log('Contest entry data: ', contestEntry);
-				console.log('Contest entry key: ', contestEntry.key);
-				console.log('Contest entry creator: ', contestEntry.creator);
 				
 				var tmpEntry = contestEntry.val();
 				tmpEntry.key = contestEntry.key;
@@ -71,10 +64,7 @@ class ContestList extends React.Component {
 								<h5 className="card-title">{entry.label}</h5>
 								<h6 className="card-subtitle mb-2 text-muted">{entry.creator}</h6>
 								<p className="card-text">Nombre de personnes à sélectionner : {entry.drawRange}</p>
-								<p className="card-text">Nombre de participants : </p>
-								<p className="card-text">Liste des participants : </p>
-								<p className="card-text">Liste des personnes choisies : </p>
-								<p className="card-text">Statut : {entry.status}</p>
+								<p className="card-text">Liste des personnes choisies : {entry.drawList}</p>
 							</div>
 						</Link>
 						<div className="card-footer">
