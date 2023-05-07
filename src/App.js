@@ -26,7 +26,7 @@ function App() {
 		<div className="app">
 			<Routes>
 				<Route path="/" element={user ? <Home user={user} /> : <Login />} />
-				<Route path="/:id" element={<Contest user={user} />} />
+				<Route path="/:id" element={user ? <Contest user={user} /> : <Login />} />
 			</Routes>
 			
 		</div>
