@@ -41,6 +41,7 @@ class Contest extends React.Component {
     componentDidMount() {
 		
         let { id } = this.props.params;
+		let contestActive = true;
 		
 		const contestRef = ref(db, 'contest/' + this.state.id);
 		onValue(contestRef, (snapshot) => {
@@ -60,10 +61,13 @@ class Contest extends React.Component {
 						contestorListTmp.push(tmpEntry);
 					});
 				}
+				
+				contestActive = snapshot.val().active;
+				
 				this.setState({
 					contestData : snapshot.val(),
 					contestorList : contestorListTmp
-					});
+				});
 			}
 		});
 		
@@ -73,7 +77,6 @@ class Contest extends React.Component {
 	/** Add participation */
 	addParticipation() {
 		
-		if(this.state.contestData.active) {
 			// Create new participation inside DB
 			const contestorRef = ref(db, 'contest/' + this.state.id + '/contestorList/' + this.state.user.uid);
 			set(contestorRef,{
@@ -81,7 +84,6 @@ class Contest extends React.Component {
 				name:this.state.user.displayName,
 				email:this.state.user.email
 			});
-		}
 		
 	}
 	
@@ -134,18 +136,21 @@ class Contest extends React.Component {
 			});
 			
 			let selectedList = [];
+			let tmpContestorList = this.state.contestorList;
 			
 			// Choose people for the draw
 			for(let i = 0; i < this.state.contestData.drawRange; i++) {
 				
 				// Tirer les personnes sélectionnées
-				let selectedIdx = Math.floor(Math.random() * nbeParticipants);
+				let selectedIdx = Math.floor(Math.random() * tmpContestorList.length);
 				
-				console.log('selectedIdx : ' + selectedIdx);
-				console.log('Choisi : ' + this.state.contestorList[selectedIdx].email);
-				
-				let selectedLabel = this.state.contestorList[selectedIdx].name + ' (' + this.state.contestorList[selectedIdx].email + ')';
+				let selectedLabel = tmpContestorList[selectedIdx].name + ' (' + tmpContestorList[selectedIdx].email + ')';
+				let tmpKey = tmpContestorList[selectedIdx].key;
 				selectedList.push(selectedLabel);
+				
+				// Suppression de la personne de la liste pour éviter un second tirage
+				tmpContestorList = tmpContestorList.filter(x => x.key != tmpKey);
+				
 			}
 			
 			// Update draw info
