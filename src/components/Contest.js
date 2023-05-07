@@ -207,7 +207,7 @@ class Contest extends React.Component {
 				{
 					this.state.contestorList.map(entry => (
 						<div className="card" key={entry.key}>
-								<div className={entry.ready ?  "card-body blink backgd" :  "card-body blink inactiveBg"}>
+								<div className={entry.ready && this.state.contestData.active ?  "card-body blink backgd" :  "card-body inactiveBg"}>
 									<h5 className="card-title">{entry.email}</h5>
 									<h6 className="card-subtitle mb-2 text-muted">{entry.name}</h6>
 									<p className="card-text">Statut : {entry.ready ? "Pret" : "Pas Pret"}</p>

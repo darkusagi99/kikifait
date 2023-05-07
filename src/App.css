@@ -37,13 +37,17 @@
   }
 }
 
-
+@keyframes blinker {
+  from {opacity: 1.0;}
+  to {opacity: 0.0;}
+}
 .blink{
-	-webkit-animation-name: blinker;
-	-webkit-animation-duration: 2s;
-	-webkit-animation-iteration-count:infinite;
-	-webkit-animation-timing-function:ease-in-out;
-	-webkit-animation-direction: alternate;
+	text-decoration: blink;
+	animation-name: blinker;
+	animation-duration: 2s;
+	animation-iteration-count:infinite;
+	animation-timing-function:ease-in-out;
+	animation-direction: alternate;
 }
 
 .backgd{
