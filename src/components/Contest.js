@@ -73,13 +73,15 @@ class Contest extends React.Component {
 	/** Add participation */
 	addParticipation() {
 		
-		// Create new participation inside DB
-		const contestorRef = ref(db, 'contest/' + this.state.id + '/contestorList/' + this.state.user.uid);
-		set(contestorRef,{
-			ready:false,
-			name:this.state.user.displayName,
-			email:this.state.user.email
-		});
+		if(this.state.contestData.active) {
+			// Create new participation inside DB
+			const contestorRef = ref(db, 'contest/' + this.state.id + '/contestorList/' + this.state.user.uid);
+			set(contestorRef,{
+				ready:false,
+				name:this.state.user.displayName,
+				email:this.state.user.email
+			});
+		}
 		
 	}
 	
@@ -112,7 +114,7 @@ class Contest extends React.Component {
 		
 		// Check if enough people and everybody ready
 		// If yes -> Tirage and status update
-		if (nbeParticipants > this.state.contestData.drawRange) {
+		if (nbeParticipants > this.state.contestData.drawRange && nbeReady == nbeParticipants-1) {
 			
 			console.log('Tirage !!!!');
 			
