@@ -71,19 +71,24 @@ class Contest extends React.Component {
 			}
 		});
 		
-		this.addParticipation();
+		this.addParticipation(contestActive);
+		
 	}
 	
 	/** Add participation */
-	addParticipation() {
+	addParticipation(contestActive) {
 		
-			// Create new participation inside DB
-			const contestorRef = ref(db, 'contest/' + this.state.id + '/contestorList/' + this.state.user.uid);
-			set(contestorRef,{
-				ready:false,
-				name:this.state.user.displayName,
-				email:this.state.user.email
-			});
+			if (contestActive) {
+		
+				// Create new participation inside DB
+				const contestorRef = ref(db, 'contest/' + this.state.id + '/contestorList/' + this.state.user.uid);
+				set(contestorRef,{
+					ready:false,
+					name:this.state.user.displayName,
+					email:this.state.user.email
+				});
+			
+			}
 		
 	}
 	
@@ -191,7 +196,7 @@ class Contest extends React.Component {
 				</div>
 				
 				<Link style={{ color: 'inherit', textDecoration: 'inherit'}} to={"/"}>
-					<button type="button" className="btn btn-default btn-xs active" onClick={this.addParticipation}>
+					<button type="button" className="btn btn-default btn-xs active">
 					Retour
 					</button>
 				</Link>
@@ -205,7 +210,7 @@ class Contest extends React.Component {
 								<div className={entry.ready ?  "card-body blink backgd" :  "card-body blink inactiveBg"}>
 									<h5 className="card-title">{entry.email}</h5>
 									<h6 className="card-subtitle mb-2 text-muted">{entry.name}</h6>
-									<p className="card-text">Nombre de personnes à sélectionner : {entry.ready ? "Pret" : "Pas Pret"}</p>
+									<p className="card-text">Statut : {entry.ready ? "Pret" : "Pas Pret"}</p>
 								</div>
 								{
 									(entry.key == this.props.user.uid && this.state.contestData.active) ? 
