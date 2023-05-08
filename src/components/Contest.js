@@ -203,7 +203,7 @@ class Contest extends React.Component {
 				
 				{ /* Liste participants */ }
 				
-				<div className="px-5 d-flex flex-column justify-content-center gap-3 mt-5"> { /* List element DIV */ }
+				<div className="px-5 d-flex flex-wrap justify-content-center gap-3 mt-5"> { /* List element DIV */ }
 				{
 					this.state.contestorList.map(entry => (
 						<div className="card" key={entry.key}>
