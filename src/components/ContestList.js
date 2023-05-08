@@ -26,6 +26,11 @@ class ContestList extends React.Component {
 	
 	// Chargement du composant
     componentDidMount() {
+		
+		// Variables pour la suppression
+		var now = Date.now();
+		var cutoff = now - 24 * 60 * 60 * 1000;
+		
 		const contestRef = ref(db, 'contest');
 		onValue(contestRef, (snapshot) => {
 			
@@ -33,17 +38,21 @@ class ContestList extends React.Component {
 			
 			snapshot.forEach((contestEntry) => {
 				
-				var tmpEntry = contestEntry.val();
-				tmpEntry.key = contestEntry.key;
-				
-				tmpContestData.push(tmpEntry);
+				if(contestEntry.val().timestamp >= cutoff) {
+					// Chargement entrée
+					var tmpEntry = contestEntry.val();
+					tmpEntry.key = contestEntry.key;
+					
+					tmpContestData.push(tmpEntry);
+				} else {
+					// Suppression de la DB
+					this.deleteEntry(contestEntry.key)
+				}
 			});
 			
 			this.setState({contestData : tmpContestData});
 		});
 	}
-	
-	
 	
 	/** Manage deletion */
 	deleteEntry(entryKey) {

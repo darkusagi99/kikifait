@@ -37,7 +37,8 @@ class NewContest extends React.Component {
 				active:true,
 				creator:this.props.user.email,
 				contestorList:[],
-				drawList:[]
+				drawList:[],
+				timestamp:Date.now()
 			});
 
 			this.setState({
