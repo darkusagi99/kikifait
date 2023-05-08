@@ -108,15 +108,21 @@ class Contest extends React.Component {
 	addReadyState(){
 		
 		let nbeParticipants = this.state.contestorList.length;
-		console.log('Nbe participants : ' + nbeParticipants);
 		
 		let nbeReady = this.state.contestorList.filter(x => x.ready).length;
-		console.log('Nbe Ready : ' + nbeReady);
+		
+		let readyColor = this.getRandColor(5);
 		
 		// Update ready state
 		const contestorReadyRef = ref(db, 'contest/' + this.state.id + '/contestorList/' + this.state.user.uid + '/ready');
 		set(contestorReadyRef,
 			true
+		);	
+		
+		// Update ready state
+		const contestorColorRef = ref(db, 'contest/' + this.state.id + '/contestorList/' + this.state.user.uid + '/color');
+		set(contestorColorRef,
+			readyColor
 		);	
 		
 		// Check if enough people and everybody ready
@@ -167,6 +173,16 @@ class Contest extends React.Component {
 		
 		
 	}
+	
+	
+	getRandColor(brightness){
+
+		// Six levels of brightness from 0 to 5, 0 being the darkest
+		var rgb = [Math.random() * 256, Math.random() * 256, Math.random() * 256];
+		var mix = [brightness*51, brightness*51, brightness*51]; //51 => 255/5
+		var mixedrgb = [rgb[0] + mix[0], rgb[1] + mix[1], rgb[2] + mix[2]].map(function(x){ return Math.round(x/2.0)})
+		return "rgb(" + mixedrgb.join(",") + ")";
+	}
 
 	
 	/** Remove ready state */
@@ -207,7 +223,7 @@ class Contest extends React.Component {
 				{
 					this.state.contestorList.map(entry => (
 						<div className="card" key={entry.key}>
-								<div className={entry.ready && this.state.contestData.active ?  "card-body blink backgd" :  "card-body inactiveBg"}>
+								<div style={{backgroundColor: entry.color}} className={entry.ready && this.state.contestData.active ?  "card-body blink" :  "card-body inactiveBg"}>
 									<h5 className="card-title">{entry.email}</h5>
 									<h6 className="card-subtitle mb-2 text-muted">{entry.name}</h6>
 									<p className="card-text">Statut : {entry.ready ? "Pret" : "Pas Pret"}</p>
